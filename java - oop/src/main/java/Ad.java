@@ -10,13 +10,13 @@ public class Ad extends BaseAdvertising {
         this.imgURL = imgURL;
         this.link = link;
         this.advertiser = advertiser;
-        this.clicks = 0;
-        this.views = 0;
+        this.clicks_count = 0;
+        this.views_count = 0;
     }
 
     @Override
     public String describeMe() {
-        return "Hi! it's an Ad. my advertiser's id is " + advertiser.getId() + " hope you enjoy!";
+        return "This is 'Ad class'. This class provides data about Ads such as title , imgURL , link ,clicks_count , views_count , advertiser and also can set and get this fields.";
     }
 
     @Override

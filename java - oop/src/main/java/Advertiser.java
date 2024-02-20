@@ -5,8 +5,8 @@ public class Advertiser extends BaseAdvertising {
     public Advertiser(int id, String name) {
         this.name = name;
         this.id = id;
-        this.clicks = 0;
-        this.views = 0;
+        this.clicks_count = 0;
+        this.views_count = 0;
     }
 
     public static int getTotalClicks() {
@@ -19,7 +19,7 @@ public class Advertiser extends BaseAdvertising {
 
     @Override
     public String describeMe() {
-        return "Hi! it's advertiser with id " + id + " and my name is " + name + " enjoy our Ads!";
+        return "This is 'Advertiser class'. This class provides data about Advertisers such as name , clicks_count , views_count and also can set and get this fields.";
     }
 
     @Override
