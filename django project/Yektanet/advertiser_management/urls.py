@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.viewAds, name='viewAds'),
+    path('', views.viewAds.as_view(), name='viewAds'),
     path('add/', views.new_form, name="new_form"),
     path('click/<id>/', views.Redirect_view.as_view())
 ]
