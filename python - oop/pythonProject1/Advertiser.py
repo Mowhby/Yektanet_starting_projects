@@ -2,17 +2,20 @@ from BaseAdvertising import BaseAdvertising
 
 
 class Advertiser(BaseAdvertising):
-    totalClicks = 0
+    advertisers = []
 
     def __init__(self, id: int, name: str):
         super().__init__()
         self.name = name
         self.id = id
+        Advertiser.advertisers.append(self)
 
     @staticmethod
     def getTotalClicks() -> int:
-        for instance in Advertiser.instances:
-            print(instance.name)
+        total_clicks = 0
+        for advertiser in Advertiser.advertisers:
+            total_clicks += advertiser.getClicks()
+        return total_clicks
 
     @staticmethod
     def help() -> str:
@@ -24,7 +27,6 @@ class Advertiser(BaseAdvertising):
 
     def incClicks(self):
         super().incClicks()
-        Advertiser.totalClicks += 1
 
     def getName(self) -> str:
         return self.name

@@ -5,7 +5,8 @@ class BaseAdvertising:
 
     @staticmethod
     def describeMe() -> str:
-        print('This is the base class! other classes will use my fields and methods. I can make this code cleaner!')
+        print(
+            'This is \'Base Advertising\'. Other classes use my fields(views_count & clicks_count) and methods. Classes use functions for getting and increamenting fields in this class. This class make this code cleaner!')
 
     def getClicks(self) -> int:
         return self.clicks_count
