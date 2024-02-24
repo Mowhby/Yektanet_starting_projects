@@ -1,5 +1,7 @@
+import java.util.ArrayList;
+
 public class Advertiser extends BaseAdvertising {
-    private static int totalClicks = 0;
+    private static ArrayList<Advertiser> advertisers = new ArrayList<>();
     private String name;
 
     public Advertiser(int id, String name) {
@@ -7,9 +9,14 @@ public class Advertiser extends BaseAdvertising {
         this.id = id;
         this.clicks_count = 0;
         this.views_count = 0;
+        advertisers.add(this);
     }
 
     public static int getTotalClicks() {
+        int totalClicks = 0;
+        for (int i = 0; i < advertisers.size(); i++) {
+            totalClicks += advertisers.get(i).clicks_count;
+        }
         return totalClicks;
     }
 
@@ -25,7 +32,6 @@ public class Advertiser extends BaseAdvertising {
     @Override
     protected void incClicks() {
         super.incClicks();
-        totalClicks++;
     }
 
     public String getName() {
@@ -36,7 +42,7 @@ public class Advertiser extends BaseAdvertising {
         this.name = name;
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 }

@@ -20,6 +20,6 @@ public class BaseAdvertising {
     }
 
     public String describeMe() {
-        return "This is the base class! other classes will use my fields and methods. I can make this code cleaner!";
+        return "'This is 'Base Advertising class'. Other classes use my fields(views_count & clicks_count) and methods. Classes use functions for getting and incrementing fields in this class. This class make this code cleaner!')";
     }
 }
