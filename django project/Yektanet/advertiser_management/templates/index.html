@@ -16,9 +16,9 @@
             <h5 class="card-title">{{ advertiser.name }}</h5>
             <div class="card-body">
                 <div class="row">
-		    {% for ad in advertiser.ad_set.all %}
+		    {% for ad in advertiser.filtered_ads %}
 		        <div class="card col-md-2 p-0 mx-2">
-		            <a href="/click/{{ ad.id }}/">
+		            <a href="/ad/{{ ad.id }}/">
 		                <img src="{{ ad.image.url }}" alt="">
 		                <div class="card-body">
 		                    <span>{{ ad.title }}</span>
