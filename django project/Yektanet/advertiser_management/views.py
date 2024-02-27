@@ -1,54 +1,67 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
+from rest_framework import status
+from rest_framework.authentication import TokenAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import *
 from .forms import NewForm
+from .serializer import AdvertiserSerializer, AdSerializer
 
 
-class viewAds(View):
-    http_method_names = ['get']
+class viewAds(APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'index.html'
 
     def get(self, request):
         ads = ad.objects.all()
-        views = []
-        for a in ads:
-            views.append(view(ad=a, user_ip=request.META.get('REMOTE_ADDR')))
+        views = [view(ad=ad, user_ip=request.META.get('REMOTE_ADDR')) for ad in ads]
         view.objects.bulk_create(views)
+
         advertisers = advetiser.objects.all()
         for adv in advertisers:
             adv.filtered_ads = adv.ad_set.filter(approve=True)
+
         context = {'advertisers': advertisers}
-        return render(request, "index.html", context=context)
+        return Response(context)
 
 
-def new_form(request):
-    if request.method == 'POST':
-        form = NewForm(request.POST, request.FILES)
+class New_form(APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'form.html'
 
-        if form.is_valid():
-            form.save()
+    def get(self, request):
+        context = {'form': NewForm}
+        return Response(context)
+
+    def post(self, request):
+        serializer = AdSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
             return redirect("viewAds")
-        else:
-            return redirect("new_form")
-    else:
-        context = {}
-        context['form'] = NewForm
-        return render(request, "form.html", context=context)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class Redirect_view(View):
-    http_method_names = ['get']
+class Redirect_view(APIView):
 
     def get(self, request, id: int):
         AD = ad.objects.get(id=id)
         click.objects.create(ad=AD, user_ip=request.META.get('REMOTE_ADDR'))
-        link = AD.link
-        return redirect(link)
+        redirect_url = AD.link
+        return Response({"redirect_url": redirect_url}, status=status.HTTP_302_FOUND)
 
 
-class Status_view(View):
-    http_method_names = ['get']
+class Status_view(APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, id: int):
         AD = ad.objects.get(id=id)
@@ -74,7 +87,6 @@ class Status_view(View):
 
         clicks = click.objects.filter(ad=AD)
         sum = 0
-        views_same_ip = []
         for c in clicks:
             views_same_ip = view.objects.filter(user_ip=c.user_ip, ad=AD)
             find_view = float('inf')
@@ -83,5 +95,5 @@ class Status_view(View):
                 if find_view > sec >= 0:
                     find_view = sec
             sum += find_view
-        Response += f"<h2> average difference between each click and related view in seconds is {sum / len(clicks)}</h2><dl>"
+        Response += f"<h2> average difference between each click and related view in seconds is {sum / len(clicks)}</h2>"
         return HttpResponse(Response)

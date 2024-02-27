@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.viewAds.as_view(), name='viewAds'),
-    path('add_new_ad/', views.new_form, name="new_form"),
+    path('add_new_ad/', views.New_form.as_view(), name="new_form"),
     path('ad/<id>/', views.Redirect_view.as_view()),
     path('show_ad_status/<id>/', views.Status_view.as_view())
 ]
