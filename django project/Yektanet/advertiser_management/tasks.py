@@ -14,9 +14,9 @@ def get_report_hourly(self):
 
     one_hour_ago = current_time - timezone.timedelta(hours=1)
     for a in ads:
-        clicks = click.objects.filter(created_on__range=[one_hour_ago, current_time], ad=a)
-        views = view.objects.filter(created_on__range=[one_hour_ago, current_time], ad=a)
-        report_hourly.objects.create(ad=a, clicks_count=len(clicks), views_count=len(views))
+        clicks = click.objects.filter(created_on__range=[one_hour_ago, current_time], ad=a).count()
+        views = view.objects.filter(created_on__range=[one_hour_ago, current_time], ad=a).count()
+        report_hourly.objects.create(ad=a, clicks_count=clicks, views_count=views)
 
 
 @shared_task(bind=True)
@@ -26,8 +26,6 @@ def get_report_daily(self):
 
     one_day_ago = current_time - timezone.timedelta(days=1)
     for a in ads:
-        clicks = sum(
-            r.clicks_count for r in report_hourly.objects.filter(created_on__range=[one_day_ago, current_time], ad=a))
-        views = sum(
-            r.views_count for r in report_hourly.objects.filter(created_on__range=[one_day_ago, current_time], ad=a))
+        clicks = click.objects.filter(created_on__range=[one_day_ago, current_time], ad=a).count()
+        views = view.objects.filter(created_on__range=[one_day_ago, current_time], ad=a).count()
         report_daily.objects.create(ad=a, clicks_count=clicks, views_count=views)
