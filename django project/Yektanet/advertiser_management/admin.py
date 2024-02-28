@@ -12,3 +12,7 @@ class display(admin.ModelAdmin):
 
 
 admin.site.register(ad, display, )
+admin.site.register(click,)
+admin.site.register(report_hourly,)
+admin.site.register(report_daily,)
+admin.site.register(view,)

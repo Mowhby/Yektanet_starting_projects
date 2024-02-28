@@ -20,8 +20,8 @@ class viewAds(APIView):
     template_name = 'index.html'
 
     def get(self, request):
-        ads = ad.objects.all()
-        views = [view(ad=ad, user_ip=request.META.get('REMOTE_ADDR')) for ad in ads]
+        ads = ad.objects.filter(approve=True)
+        views = [view(ad=a, user_ip=request.META.get('REMOTE_ADDR')) for a in ads]
         view.objects.bulk_create(views)
 
         advertisers = advetiser.objects.all()

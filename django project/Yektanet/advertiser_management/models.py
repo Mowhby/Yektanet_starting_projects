@@ -2,6 +2,7 @@ from urllib import request
 
 from django.db import models
 from datetime import datetime
+from django.utils import timezone
 
 
 class advetiser(models.Model):
@@ -28,8 +29,34 @@ class click(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     user_ip = models.CharField(max_length=100)
 
+    def __str__(self) -> str:
+        return f"{self.ad.title} {self.id}"
+
 
 class view(models.Model):
     ad = models.ForeignKey(to=ad, on_delete=models.CASCADE, help_text="What ad has been viewed.")
     created_on = models.DateTimeField(auto_now_add=True)
     user_ip = models.CharField(max_length=45)
+
+    def __str__(self) -> str:
+        return f"{self.ad.title} {self.id}"
+
+
+class report_hourly(models.Model):
+    clicks_count = models.IntegerField(default=0)
+    views_count = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    ad = models.ForeignKey(to=ad, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"'AD':{self.ad.title} - 'TIME':{self.created_on}"
+
+
+class report_daily(models.Model):
+    clicks_count = models.IntegerField(default=0)
+    views_count = models.IntegerField(default=0)
+    created_on = models.DateTimeField(auto_now_add=True)
+    ad = models.ForeignKey(to=ad, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"'AD':{self.ad.title} - 'TIME':{self.created_on}"
